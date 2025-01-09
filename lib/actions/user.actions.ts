@@ -1,4 +1,4 @@
-import User, { IUser } from "@/models/User.model";
+import User from "../database/models/user.model";
 
 /**
  * Create a new user in the database.
