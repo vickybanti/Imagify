@@ -78,14 +78,15 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
 
       // Update public metadata with Clerk client
       if (newUser) {
-      
-
-        await clerkClient.users.updateUserMetadata(id?, {
-          publicMetadata: {
-            userId: newUser._id,
-          },
-        });
-      }
+        if (id) {
+          await clerkClient.users.updateUserMetadata(id, {
+            publicMetadata: {
+              userId: newUser._id,
+            },
+          });
+        } else {
+          throw new Error("User ID is not defined");
+        }
 
       return NextResponse.json({ message: "User created successfully", user: newUser });
     }
