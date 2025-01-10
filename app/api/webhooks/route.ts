@@ -74,7 +74,13 @@ export async function POST(req: Request) {
 
       // Update public metadata with Clerk client
       if (newUser) {
-        await clerkClient.users.updateUserMetadata(id, {
+        const getUsers = async () => {
+          const clerk = await ClerkClient(); // Await the resolved value.
+          console.log(clerk.users); // Access the users property here.
+      };
+      
+      
+        await getUsers().users.updateUserMetadata(id, {
           publicMetadata: {
             userId: newUser._id,
           },
