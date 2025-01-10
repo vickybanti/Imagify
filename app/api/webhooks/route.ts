@@ -75,7 +75,7 @@ export async function POST(req: Request) {
       // Update public metadata with Clerk client
       if (newUser) {
         const getUsers = async () => {
-          const clerk = await ClerkClient(); // Await the resolved value.
+          const clerk = await clerkClient(); // Await the resolved value.
           console.log(clerk.users); // Access the users property here.
       };
       
