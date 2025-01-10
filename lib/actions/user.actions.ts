@@ -5,7 +5,7 @@ import User, {IUser} from "../database/models/user.model";
  * @param userData - The user data to create.
  * @returns The newly created user.
  */
-export async function createUser(userData: Omit<IUser, "_id">): Promise<IUser> {
+export async function createUser(userData: IUser): Promise<IUser> {
   try {
     const newUser = await User.create(userData);
     return newUser.toObject();
