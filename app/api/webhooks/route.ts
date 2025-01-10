@@ -78,9 +78,12 @@ export async function POST(req: Request) {
           const clerk = await clerkClient(); // Await the resolved value.
           console.log(clerk.users); // Access the users property here.
       };
+      const clerk = new Clerk({ apiKey: 'your-api-key' }); // Initialize Clerk with your API key.
+const users = await clerk.users.getUserList(); // Use a method to fetch users.
+console.log(users);
       
       
-        await getUsers().users.updateUserMetadata(id, {
+        await users.updateUserMetadata(id, {
           publicMetadata: {
             userId: newUser._id,
           },
