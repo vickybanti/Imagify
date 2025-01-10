@@ -109,9 +109,11 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
       };
       if(id){
         const updatedUser = await updateUser(id, user);
+
+        return NextResponse.json({ message: "User updated successfully", user: updatedUser });
+
       }
 
-      return NextResponse.json({ message: "User updated successfully", user: updatedUser });
     }
 
     // Handle "user.deleted" event
