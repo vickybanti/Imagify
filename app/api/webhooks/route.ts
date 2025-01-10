@@ -4,10 +4,15 @@ import { createClerkClient } from '@clerk/backend'
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
+import {IUser} from '../database/models/user.model'
 
 import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
 
+type DebugUser = Omit<IUser, "_id">;
+
+
 export async function POST(req: Request) {
+
   // Ensure the webhook secret is provided
   const WEBHOOK_SECRET = process.env.SIGNING_SECRET;
 
@@ -68,7 +73,7 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
       const {id, email_addresses, image_url, first_name, last_name, username } = evt.data;
 
 
-      const user = {
+      const user: DebugUser = {
         clerkId: id,
     email: email_addresses[0]?.email_address || "", // Fallback for email
     username: username ?? "", // Default to an empty string if null/undefined
@@ -106,7 +111,7 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
       const { id, image_url, first_name, last_name, username } = evt.data;
 
 
-      const user = {
+      const user:DebugUser = {
         firstName: first_name ?? "",
         lastName: last_name ?? "",
         username: username ?? "",
