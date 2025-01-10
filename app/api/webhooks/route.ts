@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
-import { WebhookEvent, clerkClient } from "@clerk/nextjs/server";
+import { WebhookEvent } from "@clerk/nextjs/server";
+import { createClerkClient } from '@clerk/backend'
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
@@ -9,6 +10,9 @@ import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
 export async function POST(req: Request) {
   // Ensure the webhook secret is provided
   const WEBHOOK_SECRET = process.env.SIGNING_SECRET;
+
+
+const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY })
 
   if (!WEBHOOK_SECRET) {
     throw new Error(
@@ -74,16 +78,9 @@ export async function POST(req: Request) {
 
       // Update public metadata with Clerk client
       if (newUser) {
-        const getUsers = async () => {
-          const clerk = await clerkClient(); // Await the resolved value.
-          console.log(clerk.users); // Access the users property here.
-      };
-      const clerk = new Clerk({ apiKey: 'your-api-key' }); // Initialize Clerk with your API key.
-const users = await clerk.users.getUserList(); // Use a method to fetch users.
-console.log(users);
-      
-      
-        await users.updateUserMetadata(id, {
+        const client = await clerkClient()
+
+        await client.users.updateUserMetadata(id, {
           publicMetadata: {
             userId: newUser._id,
           },
