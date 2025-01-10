@@ -1,62 +1,93 @@
-import User, {IUser} from "../database/models/user.model";
+"use server";
 
-/**
- * Create a new user in the database.
- * @param userData - The user data to create.
- * @returns The newly created user.
- */
-export async function createUser(userData: IUser): Promise<IUser> {
+import { revalidatePath } from "next/cache";
+
+import User from "../database/models/user.model";
+import { connectToDatabase } from "../database/mongoose";
+import { handleError } from "../utils";
+
+// CREATE
+export async function createUser(user: CreateUserParams) {
   try {
-    const newUser = await User.create(userData);
-    return newUser.toObject();
+    await connectToDatabase();
+
+    const newUser = await User.create(user);
+
+    return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    console.error("Error creating user:", error);
-    throw new Error("Unable to create user");
+    handleError(error);
   }
 }
 
-/**
- * Update an existing user in the database.
- * @param clerkId - The Clerk ID of the user to update.
- * @param updates - The fields to update.
- * @returns The updated user.
- */
-export async function updateUser(
-  clerkId: string,
-  updates: Partial<Omit<IUser, "_id" | "clerkId">>
-): Promise<IUser | null> {
+// READ
+export async function getUserById(userId: string) {
   try {
-    const updatedUser = await User.findOneAndUpdate({ clerkId }, updates, {
-      new: true, // Return the updated document
+    await connectToDatabase();
+
+    const user = await User.findOne({ clerkId: userId });
+
+    if (!user) throw new Error("User not found");
+
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+// UPDATE
+export async function updateUser(clerkId: string, user: UpdateUserParams) {
+  try {
+    await connectToDatabase();
+
+    const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
+      new: true,
     });
 
-    if (!updatedUser) {
-      throw new Error(`User with clerkId ${clerkId} not found`);
-    }
-
-    return updatedUser.toObject();
+    if (!updatedUser) throw new Error("User update failed");
+    
+    return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
-    console.error("Error updating user:", error);
-    throw new Error("Unable to update user");
+    handleError(error);
   }
 }
 
-/**
- * Delete a user from the database.
- * @param clerkId - The Clerk ID of the user to delete.
- * @returns The deleted user.
- */
-export async function deleteUser(clerkId: string): Promise<IUser | null> {
+// DELETE
+export async function deleteUser(clerkId: string) {
   try {
-    const deletedUser = await User.findOneAndDelete({ clerkId });
+    await connectToDatabase();
 
-    if (!deletedUser) {
-      throw new Error(`User with clerkId ${clerkId} not found`);
+    // Find user to delete
+    const userToDelete = await User.findOne({ clerkId });
+
+    if (!userToDelete) {
+      throw new Error("User not found");
     }
 
-    return deletedUser.toObject();
+    // Delete user
+    const deletedUser = await User.findByIdAndDelete(userToDelete._id);
+    revalidatePath("/");
+
+    return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
   } catch (error) {
-    console.error("Error deleting user:", error);
-    throw new Error("Unable to delete user");
+    handleError(error);
+  }
+}
+
+// USE CREDITS
+export async function updateCredits(userId: string, creditFee: number) {
+  try {
+    await connectToDatabase();
+
+    const updatedUserCredits = await User.findOneAndUpdate(
+      { _id: userId },
+      { $inc: { creditBalance: creditFee }},
+      { new: true }
+    )
+
+    if(!updatedUserCredits) throw new Error("User credits update failed");
+
+    return JSON.parse(JSON.stringify(updatedUserCredits));
+  } catch (error) {
+    handleError(error);
   }
 }
