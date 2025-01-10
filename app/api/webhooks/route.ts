@@ -78,9 +78,9 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
 
       // Update public metadata with Clerk client
       if (newUser) {
-        const client = clerkClient()
+      
 
-        await client.users.updateUserMetadata(id, {
+        await clerkClient.users.updateUserMetadata(id, {
           publicMetadata: {
             userId: newUser._id,
           },
