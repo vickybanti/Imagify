@@ -70,11 +70,14 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
 
       const user = {
         clerkId: id,
-        email: email_addresses[0].email_address,
-        username: username ?? "",
-        firstName: first_name ?? "",
-        lastName: last_name ?? "",
-        photo: image_url,
+    email: email_addresses[0]?.email_address || "", // Fallback for email
+    username: username ?? "", // Default to an empty string if null/undefined
+    firstName: first_name ?? "",
+    lastName: last_name ?? "",
+    photo: image_url,
+    planId: 1, // Provide default value as defined in schema
+    creditBalance: 10, // Provide default value as defined in schema
+        
       };
 
       const newUser = await createUser(user);
