@@ -117,10 +117,13 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
     // Handle "user.deleted" event
     if (eventType === "user.deleted") {
       const {id} = evt.data;
+      if (id) {
       const deletedUser = await deleteUser(id);
 
       return NextResponse.json({ message: "User deleted successfully", user: deletedUser });
-    }
+   
+       }
+       }
 
     // Log unhandled event types
     console.log(`Unhandled webhook event: ID = ${id}, Type = ${eventType}`);
