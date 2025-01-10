@@ -65,8 +65,7 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
 
     // Handle "user.created" event
     if (eventType === "user.created") {
-      const { email_addresses, image_url, first_name, last_name, username } = evt.data;
-      const { id } = evt.data;
+      const {id, email_addresses, image_url, first_name, last_name, username } = evt.data;
 
 
       const user = {
@@ -97,8 +96,7 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
   }
     // Handle "user.updated" event
     if (eventType === "user.updated") {
-      const { image_url, first_name, last_name, username } = evt.data;
-      const { id } = evt.data;
+      const { id, image_url, first_name, last_name, username } = evt.data;
 
 
       const user = {
@@ -118,6 +116,7 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
 
     // Handle "user.deleted" event
     if (eventType === "user.deleted") {
+      const {id} evt.data;
       const deletedUser = await deleteUser(id);
 
       return NextResponse.json({ message: "User deleted successfully", user: deletedUser });
