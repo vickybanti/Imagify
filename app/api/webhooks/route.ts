@@ -77,6 +77,10 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
     photo: image_url,
     planId: 1, // Provide default value as defined in schema
     creditBalance: 10, // Provide default value as defined in schema
+    children: [], // Default value
+  normalize: false, // Default value
+  body: "", // Default value
+  head: "", // Default value
         
       };
 
