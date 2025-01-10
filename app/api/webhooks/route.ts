@@ -90,7 +90,7 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
 
       return NextResponse.json({ message: "User created successfully", user: newUser });
     }
-
+  }
     // Handle "user.updated" event
     if (eventType === "user.updated") {
       const { image_url, first_name, last_name, username } = evt.data;
