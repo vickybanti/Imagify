@@ -59,11 +59,15 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
   // Extract the event type and data
   const eventType = evt.type;
   const { id } = evt.data;
+  console.log(id)
 
   try {
+
     // Handle "user.created" event
     if (eventType === "user.created") {
       const { email_addresses, image_url, first_name, last_name, username } = evt.data;
+      const { id } = evt.data;
+
 
       const user = {
         clerkId: id,
@@ -94,6 +98,8 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
     // Handle "user.updated" event
     if (eventType === "user.updated") {
       const { image_url, first_name, last_name, username } = evt.data;
+      const { id } = evt.data;
+
 
       const user = {
         firstName: first_name ?? "",
@@ -101,8 +107,9 @@ const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY 
         username: username ?? "",
         photo: image_url,
       };
-
-      const updatedUser = await updateUser(id, user);
+      if(id){
+        const updatedUser = await updateUser(id, user);
+      }
 
       return NextResponse.json({ message: "User updated successfully", user: updatedUser });
     }
