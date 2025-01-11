@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
-import { ClerkClient } from '@clerk/backend'; // Adjust the import if needed.
-import { WebhookEvent } from "@clerk/nextjs/server";
+import { WebhookEvent,auth, clerkClient, currentUser  } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
@@ -74,7 +73,10 @@ export async function POST(req: Request) {
 
     // Set public metadata
     if (newUser) {
-      await clerkClient.users.updateUserMetadata(id, {
+      const clerk = await clerkClient();
+
+
+      await clerk.users.updateUserMetadata(id, {
         publicMetadata: {
           userId: newUser._id,
         },
