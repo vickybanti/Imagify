@@ -76,7 +76,19 @@ const Sidebar = () => {
 
                                 <li className="flex-center cursor-pointer gap-2 p-4">
                                     {/* Ensure UserButton exists or replace */}
-                                    <UserButton showName />
+
+                                    <div className="relative w-10 h-10 p-2 rounded-full shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] hover:shadow-none transition-shadow">
+                    <Image
+                      src={
+                        data?.user.image ||
+                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                      }
+                      alt="user"
+                      fill
+                      className="rounded-full bg-[#042D29]"
+                    />
+                  </div>
+                  {data?.user?.name}
                                 </li>
                             </ul>
                         </>
