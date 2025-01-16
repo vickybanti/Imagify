@@ -35,11 +35,11 @@ export async function getUserById(userId: string) {
 }
 
 // UPDATE
-export async function updateUser(clerkId: string, user: UpdateUserParams) {
+export async function updateUser(userId: string, user: UpdateUserParams) {
   try {
     await connectToDatabase();
 
-    const updatedUser = await User.findOneAndUpdate({ _id }, user, {
+    const updatedUser = await User.findOneAndUpdate({ userId }, user, {
       new: true,
     });
 
