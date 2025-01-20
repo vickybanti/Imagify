@@ -15,7 +15,7 @@ declare module "next-auth" {
       firstName?: string | null;
       lastName?: string | null;
       photo?: string | null;
-      userName?: string | null;
+      name?: string | null;
       accessToken?: string | null;
     };
   }
@@ -75,8 +75,14 @@ export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(client),
   callbacks: {
     async session({ session, token }) {
+      console.log(token)
+      console.log(session)
       if (token?.accessToken) {
         session.user.accessToken = token.accessToken;
+      session.user.firstName = token.firstName as string | null;
+      session.user.lastName = token.lastName as string | null;
+      session.user.photo = token.photo as string | null;
+      session.user.name = token.userName as string | null;
       }
       return session;
     },
@@ -102,7 +108,8 @@ export const authOptions: NextAuthOptions = {
         if (!existingUser) {
           await User.create({
             email: user.email,
-            name: user.name,
+            photo: user.image!,
+            userName: user.name!,
             isAdmin: false,
             city: "pending",
             country: "pending",
