@@ -103,13 +103,16 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user }) {
       try {
         await connectToDatabase();
-
+    
         const existingUser = await User.findOne({ email: user.email });
         if (!existingUser) {
           await User.create({
             email: user.email,
-            image: user.image!,
-            userName: user.name!,
+            name: user.name || "Unknown", // Fallback for missing name
+            lastName: "Pending",         // Placeholder for required field
+            firstName: "Pending",        // Placeholder for required field
+            photo: user.image || "https://example.com/default-photo.png", // Fallback image
+            username: user.email?.split("@")[0] || "Unknown", // Generate username from email
             isAdmin: false,
             city: "pending",
             country: "pending",
@@ -122,6 +125,8 @@ export const authOptions: NextAuthOptions = {
         console.error("Error during sign in:", error);
         return false;
       }
+    
+    
     },
   },
 };
