@@ -14,7 +14,7 @@ declare module "next-auth" {
       id?: string;
       firstName?: string | null;
       lastName?: string | null;
-      photo?: string | null;
+      image?: string | null;
       name?: string | null;
       accessToken?: string | null;
     };
@@ -81,7 +81,7 @@ export const authOptions: NextAuthOptions = {
         session.user.accessToken = token.accessToken;
       session.user.firstName = token.firstName as string | null;
       session.user.lastName = token.lastName as string | null;
-      session.user.photo = token.photo as string | null;
+      session.user.image = token.image as string | null;
       session.user.name = token.userName as string | null;
       }
       return session;
@@ -108,7 +108,7 @@ export const authOptions: NextAuthOptions = {
         if (!existingUser) {
           await User.create({
             email: user.email,
-            photo: user.image!,
+            image: user.image!,
             userName: user.name!,
             isAdmin: false,
             city: "pending",
