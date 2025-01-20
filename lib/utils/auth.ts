@@ -77,9 +77,12 @@ export const authOptions: NextAuthOptions = {
       if (token?.accessToken) {
         session.user.accessToken = token.accessToken;
       }
+      console.log("Session:", session);
       return session;
     },
     async jwt({ token, account }) {
+      console.log("JWT Token:", token);
+      console.log("Account:", account);
       if (account) {
         token.accessToken = account.access_token;
 
@@ -96,7 +99,7 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user }) {
       try {
         await connectToDatabase();
-
+    
         const existingUser = await User.findOne({ email: user.email });
         if (!existingUser) {
           await User.create({
@@ -114,7 +117,7 @@ export const authOptions: NextAuthOptions = {
         console.error("Error during sign in:", error);
         return false;
       }
-    },
+    }
   },
 };
 
