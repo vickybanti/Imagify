@@ -3,116 +3,116 @@ import React from "react";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "./ui/sheet";
 import Link from "next/link";
 import Image from "next/image";
-import { signIn, signOut, useSession } from "next-auth/react";
 import { navLinks } from "@/app/constants";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { ColourfulText } from "./ui/colourful-text";
+import { MenuItem, ProductItem } from "./ui/NavbarMenu";
 
 const MobileNav = () => {
   const pathname = usePathname();
-  const { data, status } = useSession();
 
   return (
-    <div className="header">
-      <Link href="/" className="flex items-center gap-2 md:py-2">
-        <Image
-          src="/assets/images/logo-text.svg"
-          alt="logo"
-          width={180}
-          height={28}
-        />
-      </Link>
+    <div>
+      {/* Header Section */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-white dark:bg-black shadow-sm">
+        <div className="container mx-auto flex items-center justify-between py-4 px-6">
+          {/* Logo */}
+          <Link href="/">
+            <h2 className="font-extrabold text-xl">
+              <ColourfulText text="Mooreplaza" />
+            </h2>
+          </Link>
 
-      <nav className="flex gap-2">
-        {status === "authenticated" ? (
-          <>
-            <div className="relative w-10 h-10 p-2 rounded-full shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] hover:shadow-none transition-shadow">
-              <Image
-                src={
-                  data?.user.image ||
-                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                }
-                alt="user"
-                fill
-                className="rounded-full bg-[#042D29]"
-              />
-            </div>
+          {/* Mobile Navigation Sheet */}
+          <nav>
             <Sheet>
+              {/* Menu Trigger */}
               <SheetTrigger>
                 <Image
-                  src="/assets/icons/menu.svg"
+                  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                   alt="menu"
                   width={32}
                   height={32}
-                  className="cursor-pointer"
+                  className="cursor-pointer "
                 />
               </SheetTrigger>
-              <SheetContent className="sheet-content sm:w-64">
-                <Image
-                  src="/assets/images/logo-text.svg"
-                  alt="logo"
-                  width={152}
-                  height={23}
-                />
 
+              {/* Sheet Content */}
+              <SheetContent className="sm:w-64">
+                {/* Logo Inside Sheet */}
+                <Link href="/">
+                  <h2 className="font-extrabold text-xl mb-6">
+                    <ColourfulText text="Mooreplaza" />
+                  </h2>
+                </Link>
+
+                {/* Navigation Links */}
                 <ul className="header-nav_elements">
-                  {navLinks.slice(0, 6).map((link) => {
+                  {navLinks.map((link) => {
                     const isActive = link.route === pathname;
 
                     return (
-                      <li
-                        key={link.route}
-                        className={`p-18 flex whitespace-nowrap text-dark-700 ${
-                          isActive ? "gradient-text text-white" : ""
-                        }`}
-                      >
-                        <Link
-                          className="sidebar-link cursor-pointer"
-                          href={link.route}
+                      <li key={link.route}>
+                        <MenuItem
+                          item={link.label}
+                          setActive={() => {}}
+                          active={isActive}
                         >
-                          <Image
-                            src={link.icon}
-                            alt="icon"
-                            width={24}
-                            height={24}
-                          />
-                          {link.label}
-                        </Link>
+                          {/* Link */}
+                          <Link
+                            className="sidebar-link flex items-center space-x-2"
+                            href={link.route}
+                          >
+                            <Image
+                              src={link.icon}
+                              alt={link.label}
+                              width={24}
+                              height={24}
+                            />
+                            <span>{link.label}</span>
+                          </Link>
+
+                          {/* Product Items */}
+                          {link.productItems && (
+                            <div className="text-sm grid grid-cols-1 gap-4 p-4 z-50">
+                              {link.productItems.map((product) => (
+                                <ProductItem
+                                  key={product.title}
+                                  title={product.title}
+                                  href={product.href}
+                                  src={product.src}
+                                  description={product.description}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </MenuItem>
                       </li>
                     );
                   })}
                 </ul>
 
+                {/* Profile Image Inside Sheet */}
                 <SheetTitle className="pt-7">
                   <div className="relative w-10 h-10 p-2 rounded-full shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] hover:shadow-none transition-shadow">
                     <Image
-                      src={
-                        data?.user.image ||
-                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                      }
+                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                       alt="user"
                       fill
                       className="rounded-full bg-[#042D29]"
                     />
                   </div>
-                  {data?.user?.name}
                 </SheetTitle>
               </SheetContent>
             </Sheet>
-          </>
-        ) : (
-          <Button asChild className="button bg-purple-gradient bg-cover">
-            <Link href="/login">Login</Link>
-          </Button>
-        )}
-      </nav>
+          </nav>
+        </div>
+      </header>
     </div>
   );
 };
