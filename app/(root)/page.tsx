@@ -1,9 +1,10 @@
 import React from 'react'
+import TransformationForm from '../components/shared/TransformationForm'
 
 const Home = () => {
   return (
     <div>
-      <p>Home</p>
+      <TransformationForm />
       
       </div>
   )

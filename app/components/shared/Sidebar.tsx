@@ -12,6 +12,7 @@ const Sidebar = () => {
     const pathname = usePathname();
     const { data, status } = useSession();
     const userName = data?.user?.name;
+    console.log(data)
 
     return (
         <aside className="sidebar">
@@ -80,7 +81,7 @@ const Sidebar = () => {
                                     <div className="relative w-10 h-10 p-2 rounded-full shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] hover:shadow-none transition-shadow">
                     <Image
                       src={
-                        data?.user.photo ||
+                        data?.user.image ||
                         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                       }
                       alt="user"
